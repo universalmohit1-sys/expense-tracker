@@ -63,6 +63,9 @@
       </div>
     </section>
 
+    <!-- Net Balance -->
+    <div class="net-balance" id="netBalance">Net Balance: $0.00</div>
+
     <!-- Category Breakdown -->
     <section class="category-section">
       <h2>Spending by Category</h2>
@@ -71,11 +74,30 @@
       </div>
     </section>
 
+    <!-- Income/Outgo Summary -->
+    <section class="income-outgo-section">
+      <div class="income-outgo-grid">
+        <div class="income-card">
+          <h3>📥 Total Income</h3>
+          <div class="income-amount" id="incomeTotal">$0.00</div>
+        </div>
+        <div class="expense-card">
+          <h3>📤 Total Expenses</h3>
+          <div class="expense-amount" id="expenseTotal">$0.00</div>
+        </div>
+        <div class="net-card">
+          <h3>📊 Net Balance</h3>
+          <div class="net-amount" id="netBalance">$0.00</div>
+        </div>
+      </div>
+    </section>
+
     <!-- Add/Edit Expense Form -->
     <section class="form-section">
       <h2 id="formTitle">Add Expense</h2>
       <form id="expenseForm">
         <input type="hidden" id="editId">
+        
         <div class="form-row">
           <div class="form-group">
             <label for="amount">Amount</label>
@@ -89,24 +111,42 @@
             <input type="date" id="date" required>
           </div>
         </div>
+
         <div class="form-group">
           <label for="category">Category</label>
           <div class="category-grid" id="categoryGrid">
-            <button type="button" class="category-btn" data-value="food">🍔<span>Food</span></button>
-            <button type="button" class="category-btn" data-value="transport">🚗<span>Transport</span></button>
-            <button type="button" class="category-btn" data-value="shopping">🛍️<span>Shopping</span></button>
-            <button type="button" class="category-btn" data-value="bills">📄<span>Bills</span></button>
-            <button type="button" class="category-btn" data-value="entertainment">🎬<span>Fun</span></button>
-            <button type="button" class="category-btn" data-value="health">💊<span>Health</span></button>
-            <button type="button" class="category-btn" data-value="education">📚<span>Education</span></button>
-            <button type="button" class="category-btn" data-value="other">📦<span>Other</span></button>
+            <!-- Default categories rendered by JS -->
           </div>
           <input type="hidden" id="category" required>
         </div>
+
         <div class="form-group">
           <label for="description">Description</label>
           <input type="text" id="description" placeholder="What did you spend on?" maxlength="100">
         </div>
+
+        <!-- Person fields for ledger tracking -->
+        <div class="form-group">
+          <label>Person</label>
+          <select id="fromPerson">
+            <option value="">— Paid by —</option>
+            <!-- Options rendered by JS -->
+          </select>
+          <select id="toPerson">
+            <option value="">— Received from —</option>
+            <!-- Options rendered by JS -->
+          </select>
+        </div>
+
+        <!-- Income/Expense type toggle -->
+        <div class="form-group">
+          <label>Transaction Type</label>
+          <select id="typeToggle">
+            <option value="expense">Expense (outgoing)</option>
+            <option value="income">Income (incoming)</option>
+          </select>
+        </div>
+
         <div class="form-group">
           <label for="paymentMethod">Payment Method</label>
           <select id="paymentMethod">
@@ -132,6 +172,7 @@
         </div>
         <select id="filterCategory">
           <option value="all">All Categories</option>
+          <!-- Options rendered by JS -->
           <option value="food">🍔 Food</option>
           <option value="transport">🚗 Transport</option>
           <option value="shopping">🛍️ Shopping</option>
@@ -167,6 +208,11 @@
       <p class="empty-icon">📝</p>
       <p>No expenses yet. Add your first one above!</p>
     </div>
+
+    <!-- People Sidebar -->
+    <aside id="peopleSidebar" class="people-sidebar">
+      <p>No people yet. Add someone above.</p>
+    </aside>
 
     <!-- Export & Clear -->
     <section class="actions-section">
