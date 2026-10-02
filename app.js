@@ -288,6 +288,8 @@
     addPersonBtn: document.getElementById('addPersonBtn'),
     personForm: document.getElementById('personForm'),
     personInput: document.getElementById('personInput'),
+    fromPersonInput: document.getElementById('fromPerson'),
+    toPersonInput: document.getElementById('toPerson'),
     typeToggle: document.getElementById('typeToggle'),
     incomeSection: document.getElementById('incomeSection'),
     expenseSection: document.getElementById('expenseSection'),
@@ -306,6 +308,7 @@
     updateCurrencyDisplay();
     updateTheme();
     renderPeopleSidebar();
+    renderPersonOptions();
   }
 
   // ==========================================
@@ -321,8 +324,34 @@
     const date = DOM.dateInput.value;
     const paymentMethod = DOM.paymentMethodInput.value;
     const type = DOM.typeToggle ? DOM.typeToggle.value : 'expense';
-    const fromPerson = DOM.fromPersonInput ? DOM.fromPersonInput.value : '';
-    const toPerson = DOM.toPersonInput ? DOM.toPersonInput.value : '';
+
+    // Get person names from selects - handle "Add new person..." option
+    let fromPerson = DOM.fromPersonInput.value;
+    let toPerson = DOM.toPersonInput.value;
+
+    // If "Add new person..." was selected for fromPerson
+    if (fromPerson === 'new') {
+      const newName = prompt('Enter the name of the person who paid:');
+      if (newName && newName.trim()) {
+        addPerson(newName.trim());
+        renderPersonOptions(); // Re-render options with new person
+        fromPerson = newName.trim();
+      } else {
+        fromPerson = ''; // User cancelled
+      }
+    }
+
+    // If "Add new person..." was selected for toPerson
+    if (toPerson === 'new') {
+      const newName = prompt('Enter the name of the person who received the money:');
+      if (newName && newName.trim()) {
+        addPerson(newName.trim());
+        renderPersonOptions(); // Re-render options with new person
+        toPerson = newName.trim();
+      } else {
+        toPerson = ''; // User cancelled
+      }
+    }
 
     // Validation
     if (!amount || amount <= 0) {
@@ -816,6 +845,21 @@
         <span style="font-size: 0.7rem; color: var(--text-secondary);">(${getPersonBalanceDisplay(person.name)})</span>
       </div>
     `).join('');
+  }
+
+  // Render person options in the form selects
+  function renderPersonOptions() {
+    const fromPersonSelect = DOM.fromPersonInput;
+    const toPersonSelect = DOM.toPersonInput;
+    
+    if (!fromPersonSelect || !toPersonSelect) return;
+    
+    // Build options: add "Add new person..." at the top, then existing people
+    const peopleOptions = people.map(person => `<option value="${person.name}">${person.name}</option>`).join('');
+    const addPersonOption = '<option value="new">Add new person...</option>';
+    
+    fromPersonSelect.innerHTML = addPersonOption + peopleOptions;
+    toPersonSelect.innerHTML = addPersonOption + peopleOptions;
   }
 
   // Get person balance display string
